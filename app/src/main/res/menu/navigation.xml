@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/navigation_weightTracker"
+        android:icon="@drawable/ic_graph_black_24dp"
+        android:title="Weight Tracker" />
+
+    <item
+        android:id="@+id/navigation_Visit"
+        android:icon="@drawable/ic_local_hospital_black_24dp"
+        android:title="Doctor's Visit" />
+
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/ic_calendar_black_24dp"
+        android:title="Calendar" />
+
+</menu>
