@@ -6,7 +6,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class WeightLog extends AppCompatActivity /*implements OnChartGestureListener, OnChartValueSelectedListener*/ {
 
@@ -40,7 +39,7 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
                         selectedFragment = new WeightTrackerFragment();
                         break;
                     case R.id.navigation_Visit:
-                        selectedFragment = new VisitFragment();
+                        selectedFragment = new AppointmentsFragment();
                         break;
                     case R.id.navigation_calendar:
                         selectedFragment = new CalendarFragment();

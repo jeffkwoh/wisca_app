@@ -26,7 +26,7 @@
 
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/textViewDate"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -43,48 +43,48 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/textViewWeightTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="WEIGHT"
-                app:layout_constraintStart_toEndOf="@+id/textView14"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintStart_toEndOf="@+id/textViewDate"
+                app:layout_constraintTop_toBottomOf="@+id/textViewReasonTitle" />
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/textViewReasonTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="REASON"
-                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintStart_toEndOf="@+id/textViewDate"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/textViewReason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="Fever medication dosage"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView15"
-                app:layout_constraintLeft_toRightOf="@+id/textView15"
-                app:layout_constraintStart_toEndOf="@+id/textView15" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewReasonTitle"
+                app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"
+                app:layout_constraintStart_toEndOf="@+id/textViewReasonTitle" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/textViewWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="27.9kg"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView18"
-                app:layout_constraintLeft_toRightOf="@+id/textView15"
-                app:layout_constraintStart_toEndOf="@+id/textView18" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewWeightTitle"
+                app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"
+                app:layout_constraintStart_toEndOf="@+id/textViewWeightTitle" />
 
         </android.support.constraint.ConstraintLayout>
 
