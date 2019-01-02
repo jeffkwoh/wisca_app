@@ -1,34 +1,24 @@
 package ritwik.graphapp;
 
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.MifareClassic;
-import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
-
-import ritwik.graphapp.parser.NdefMessageParser;
-import ritwik.graphapp.record.ParsedNdefRecord;
 
 
 public class HomeFragment extends Fragment {
 
-    private NfcAdapter nfcAdapter;
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+}
+
+/*    private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private TextView text;
 
@@ -55,10 +45,10 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-    /*@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-    }*/
+    }
 
     @Override
     protected void onResume() {
@@ -256,6 +246,4 @@ public class HomeFragment extends Fragment {
             factor *= 256l;
         }
         return result;
-    }
-
-}
+    }*/

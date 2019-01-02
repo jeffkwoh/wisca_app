@@ -7,16 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v7.app.AppCompatActivity;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 
@@ -69,7 +65,7 @@ public class WeightTrackerFragment extends Fragment  {
 
         mTextMessage = (TextView) view.findViewById(R.id.message);
 
-        mChart1 = (LineChart) view.findViewById(R.id.linechart2);
+        /*mChart1 = (LineChart) view.findViewById(R.id.linechart2);
 
 //        mChart.setOnChartGestureListener(WeightLog.this);
 //        mChart.setOnChartValueSelectedListener(WeightLog.this);
@@ -97,7 +93,7 @@ public class WeightTrackerFragment extends Fragment  {
 
         LineData data2 = new LineData(dataSets2);
 
-        mChart1.setData(data2);
+        mChart1.setData(data2);*/
 
         return view;
     }
