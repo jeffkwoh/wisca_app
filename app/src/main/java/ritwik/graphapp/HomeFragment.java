@@ -3,13 +3,16 @@ package ritwik.graphapp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
+import static ritwik.graphapp.NfcUtils.NfcConstants.BUNDLE_PATIENT_WEIGHT_KEY;
+import static ritwik.graphapp.NfcUtils.NfcConstants.BUNDLE_WHEELCHAIR_WEIGHT_KEY;
 
 public class HomeFragment extends Fragment {
 
@@ -25,13 +28,34 @@ public class HomeFragment extends Fragment {
             textViewNfcReadData.setText("READING");
         });
 
-        String nfcString = getArguments() == null ?
-                null : getArguments().getString("nfcData");
-        Log.d("nfcString", nfcString == null ? "null" : nfcString);
-        if (nfcString != null) {
-            textViewNfcReadData.setText(nfcString);
+
+        Bundle bundleActivity = getArguments();
+        if (bundleActivity != null) {
+            List<String> wheelchairWeightData = bundleActivity
+                    .getStringArrayList(BUNDLE_WHEELCHAIR_WEIGHT_KEY);
+            List<String> patientWeightData = bundleActivity
+                    .getStringArrayList(BUNDLE_PATIENT_WEIGHT_KEY);
+
+            StringBuilder newString = new StringBuilder();
+            appendToStringBuilder(wheelchairWeightData, newString, "Wheelchairweight:\n");
+            appendToStringBuilder(patientWeightData, newString, "PatientWeightData:\n");
+
+            textViewNfcReadData.setText(newString.toString());
         }
 
         return view;
+    }
+
+    private void appendToStringBuilder(List<String> wheelchairWeightData,
+                                       StringBuilder newString,
+                                       String precedingString) {
+        if (wheelchairWeightData != null) {
+            newString.append(precedingString);
+            for (String s : wheelchairWeightData) {
+                newString.append(s);
+                newString.append('\n');
+
+            }
+        }
     }
 }
