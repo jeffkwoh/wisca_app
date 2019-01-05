@@ -21,13 +21,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Set Button Handler
-        Button buttonNfcRead = (Button) view.findViewById(R.id.buttonNfcRead);
         final TextView textViewNfcReadData = (TextView) view.findViewById(R.id.textViewNfcReadData);
-        buttonNfcRead.setOnClickListener((View v) -> {
-            textViewNfcReadData.setText("READING");
-        });
-
 
         Bundle bundleActivity = getArguments();
         if (bundleActivity != null) {

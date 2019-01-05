@@ -65,16 +65,4 @@
         android:layout_marginBottom="83dp"
         android:text="NFC not detected yet" />
 
-    <Button
-        android:id="@+id/buttonNfcRead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="17dp"
-        android:text="READ" />
-
 </RelativeLayout>
