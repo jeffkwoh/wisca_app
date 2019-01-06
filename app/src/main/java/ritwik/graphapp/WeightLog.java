@@ -1,9 +1,12 @@
 package ritwik.graphapp;
 
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -24,6 +27,9 @@ import static ritwik.graphapp.NfcUtils.NfcConstants.WHEELCHAIR_WEIGHT_PREFIX;
 
 public class WeightLog extends AppCompatActivity /*implements OnChartGestureListener, OnChartValueSelectedListener*/ {
     NfcAdapter mNfcAdapter = null;
+    IntentFilter[] intentFiltersArray = null;
+    String[][] techListsArray = null;
+    PendingIntent pendingIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,21 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
         }
+
+        // Set up data structures for foreground dispatch
+        pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                0);
+        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndef.addDataType("text/plain");    /* Handles only text/plain dispatches */
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            throw new RuntimeException("fail", e);
+        }
+        intentFiltersArray = new IntentFilter[]{ndef,};
+        techListsArray = new String[][]{new String[]{Ndef.class.getName()}};
     }
 
     // TODO: Create NFC Interface for encapsulation and to ensure activity implements NFC methods
@@ -48,6 +69,11 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
         return mNfcAdapter;
     }
 
+//    public void updateWheelchairWeight(int weight) {
+//        NfcAdapter mNfcAdapter = getNfcAdapter();
+//        mNfcAdapter.
+//    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -56,8 +82,25 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        getNfcAdapter().disableForegroundDispatch(this);
+    }
+
+
+    /**
+     * TODO: Add guard clause in the scenario that device is not nfc enabled.
+     */
+    @Override
     protected void onResume() {
         super.onResume();
+
+        getNfcAdapter().enableForegroundDispatch(
+                this,
+                pendingIntent,
+                intentFiltersArray,
+                techListsArray);
+
         Intent intent = getIntent();
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
