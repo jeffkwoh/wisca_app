@@ -7,20 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v7.app.AppCompatActivity;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
-public class WeightTrackerFragment extends Fragment  {
+import static ritwik.graphapp.NfcUtils.NfcConstants.BUNDLE_PATIENT_WEIGHT_KEY;
+
+public class WeightTrackerFragment extends Fragment {
 
     private TextView mTextMessage;
 
@@ -45,18 +48,17 @@ public class WeightTrackerFragment extends Fragment  {
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(false);
 
-        ArrayList<Entry> yValues = new ArrayList<>();
+        ArrayList<Entry> coordinates = new ArrayList<>();
 
-        yValues.add(new Entry(0, 30f));
-        yValues.add(new Entry(1, 20f));
-        yValues.add(new Entry(2, 30f));
-        yValues.add(new Entry(3, 60f));
-        yValues.add(new Entry(4, 50f));
-        yValues.add(new Entry(5, 25f));
-        yValues.add(new Entry(6, 40f));
-        yValues.add(new Entry(7, 45f));
+        setUpDummyCoords(coordinates);
+        List<String> patientWeightDateList = getArguments() == null ?
+                null : getArguments().getStringArrayList(BUNDLE_PATIENT_WEIGHT_KEY);
 
-        LineDataSet set1 = new LineDataSet(yValues, "Data Set 1");
+        if (patientWeightDateList != null) {
+            coordinates.addAll(parseToEntries(patientWeightDateList));
+        }
+        Collections.sort(coordinates, (a, b)-> Math.round(a.getX() - b.getX()));
+        LineDataSet set1 = new LineDataSet(coordinates, "Data Set 1");
 
         set1.setFillAlpha(110);
 
@@ -69,37 +71,50 @@ public class WeightTrackerFragment extends Fragment  {
 
         mTextMessage = (TextView) view.findViewById(R.id.message);
 
-        mChart1 = (LineChart) view.findViewById(R.id.linechart2);
-
-//        mChart.setOnChartGestureListener(WeightLog.this);
-//        mChart.setOnChartValueSelectedListener(WeightLog.this);
-
-        mChart1.setDragEnabled(true);
-        mChart1.setScaleEnabled(false);
-
-        ArrayList<Entry> yValues2 = new ArrayList<>();
-
-        yValues2.add(new Entry(0, 30f));
-        yValues2.add(new Entry(1, 40f));
-        yValues2.add(new Entry(2, 50f));
-        yValues2.add(new Entry(3, 30f));
-        yValues2.add(new Entry(4, 70f));
-        yValues2.add(new Entry(5, 35f));
-        yValues2.add(new Entry(6, 60f));
-        yValues2.add(new Entry(7, 35f));
-
-        LineDataSet set2 = new LineDataSet(yValues2, "Data Set 2");
-
-        set2.setFillAlpha(110);
-
-        ArrayList<ILineDataSet> dataSets2 = new ArrayList<>();
-        dataSets2.add(set2);
-
-        LineData data2 = new LineData(dataSets2);
-
-        mChart1.setData(data2);
-
         return view;
+    }
+
+    private List<Entry> parseToEntries(List<String> patientWeightDateList) {
+        List<Entry> entryList = new ArrayList<>();
+        for (String s : patientWeightDateList) {
+            Entry e = parseWeightDateString(s);
+            if (e == null) {
+                continue;
+            }
+            entryList.add(e);
+        }
+        return entryList;
+    }
+
+    private Entry parseWeightDateString(String patientWeightDate) {
+        int delimiterIndex = patientWeightDate.indexOf(',');
+        int weightInGrams = Integer.parseInt(
+                patientWeightDate.substring(0, delimiterIndex).trim());
+
+        String dateString =
+                patientWeightDate
+                        .substring(delimiterIndex + 1, patientWeightDate.length());
+        SimpleDateFormat parser = new SimpleDateFormat("dd-mm-yyyy");
+        // TODO: Support graph with years
+        int month = -1;
+        Date date;
+        try {
+            date = parser.parse(dateString);
+            SimpleDateFormat formatter = new SimpleDateFormat("mm");
+            month = Integer.parseInt(formatter.format(date));
+
+        } catch (ParseException e) {
+            return null;
+        }
+
+        return new Entry(month, weightInGrams / 1000f);
+    }
+
+    private void setUpDummyCoords(ArrayList<Entry> coordinates) {
+        coordinates.add(new Entry(2, 26.2f));
+        coordinates.add(new Entry(3, 27.1f));
+        coordinates.add(new Entry(4, 27.9f));
+        coordinates.add(new Entry(5, 28.6f));
     }
 
 }
