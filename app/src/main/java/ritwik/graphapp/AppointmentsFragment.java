@@ -20,10 +20,23 @@ public class AppointmentsFragment extends Fragment {
     List<Appointment> appointmentList;
     AppointmentAdapter appointmentAdapter;
     RecyclerView recyclerView;
-    String date, weight, reason;
 
-    public AppointmentsFragment(){
-        //Required empty public constructor
+    public static AppointmentsFragment newInstance(String date, String weight, String reason){
+        AppointmentsFragment apptFrag = new AppointmentsFragment();
+
+        //create bundle and pass in date, weight and reason into bundle
+        Bundle bundle = new Bundle();
+        bundle.putString("date", date);
+        bundle.putString("weight", weight);
+        bundle.putString("reason", reason);
+        apptFrag.setArguments(bundle);
+
+        return apptFrag;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -39,57 +52,38 @@ public class AppointmentsFragment extends Fragment {
         // Data structure for cardview
         final List<Appointment> appointmentList = new ArrayList<>(); // TODO: List should be sorted
 
+        //Add dummy data to appointment list
         appointmentList.add(new Appointment(0, "11 Oct 2018", "99kg", "Finger stuck in fidget spinner"));
         appointmentList.add(new Appointment(0, "11 Sep 2018", "20kg", "Both arms broken"));
 
-        // Set adapter
-        final AppointmentAdapter appointmentAdapter = new AppointmentAdapter(getContext(), appointmentList);
-        recyclerView.setAdapter(appointmentAdapter);
+
+        // TODO: bundle is always NULL. Need to figure out why and fix.
+        //check bundle for new input
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String date = bundle.getString("date");
+            String weight = bundle.getString("weight");
+            String reason = bundle.getString("reason");
+            //Add user input to data structure
+            appointmentList.add(new Appointment(0, date, weight, reason));
+        }
 
         // Set button listener
         Button addAppointmentButton = rootView.findViewById(R.id.buttonAddAppointment);
         addAppointmentButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //onAddItem(v);
+
+                //Open New Appointments Form
                 Intent input_form = new Intent(getActivity(), AppointmentInputActivity.class);
                 startActivity(input_form);
 
             }
         });
 
-        //check bundle for new input
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            date = bundle.getString("date");
-            weight = bundle.getString("weight");
-            reason = bundle.getString("reason");
-            appointmentList.add(new Appointment(0, date, weight, reason));
-            appointmentAdapter.notifyDataSetChanged();
-        } else {
-            appointmentList.add(new Appointment(0, "231", "sddsdq", "dofijsoifsd"));
-            appointmentAdapter.notifyDataSetChanged();
-        }
+        // Set adapter
+        appointmentAdapter = new AppointmentAdapter(getContext(), appointmentList);
+        recyclerView.setAdapter(appointmentAdapter);
 
         return rootView;
     }
-
-    /*public void onAddItem(View v) {
-//        appointmentList.add(new Appointment(0, "231", "sddsdq", "dofijsoifsd"));
-
-        //int id = appointmentList.size() + 1;
-
-        // Method to open New Appointment Form.
-        Intent input_form = new Intent(getActivity(), AppointmentInputActivity.class);
-        startActivity(input_form);
-
-        date = AppointmentInputActivity.getIntent().getExtras().getString("date");
-        weight = getActivity().getIntent().getExtras().getString("weight");
-        reason = getActivity().getIntent().getExtras().getString("reason");
-
-//        appointmentList.add(new Appointment(0, date, weight, reason));
-//        appointmentAdapter.notifyDataSetChanged();
-
-
-    }*/
-
 }
