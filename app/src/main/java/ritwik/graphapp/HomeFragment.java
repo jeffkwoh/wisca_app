@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,10 +29,18 @@ public class HomeFragment extends Fragment {
             renderNfcData(textViewNfcReadData, bundleActivity);
         }
 
-        Button buttonTestWrite = (Button) view.findViewById(R.id.buttonTestWrite);
-        buttonTestWrite.setOnClickListener((v) -> {
+        Button buttonUpdateTag = (Button) view.findViewById(R.id.buttonUpdateTag);
+        buttonUpdateTag.setOnClickListener((v) -> {
+            EditText editTextWheelchairWeight =
+                    (EditText) view.findViewById(R.id.editTextWheelchairWeight);
+            String input = editTextWheelchairWeight.getText().toString();
+            // TODO: DATA VALIDATION FOR INTEGER OVERFLOW
+            if (input.equals("")) {
+                // Tell the user it needs to put a number
+                return;
+            }
             NfcWriter writer = (NfcWriter) getActivity();
-            writer.writeWheelchairWeightToTag(123);
+            writer.writeWheelchairWeightToTag(Integer.parseInt(input));
         });
 
         return view;

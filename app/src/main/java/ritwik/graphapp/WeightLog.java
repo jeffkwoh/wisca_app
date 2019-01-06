@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class WeightLog extends AppCompatActivity implements NfcWriter /*implemen
         weightToWrite = weight;
     }
 
-    public NdefMessage updateWheelchairWeight(int weight, NdefMessage currentMessage) {
+    private NdefMessage createUpdatedMessage(int weight, NdefMessage currentMessage) {
         // checks for null messages
         if (currentMessage == null) {
             return null;
@@ -87,8 +86,8 @@ public class WeightLog extends AppCompatActivity implements NfcWriter /*implemen
 
         List<NdefRecord> recordList = new ArrayList<>();
         recordList.add(NdefRecord.createTextRecord(
-                        "en",
-                        " :" + String.valueOf(weight)));
+                "en",
+                " :" + String.valueOf(weight)));
         // Retains only non wheelchair-weight tag data
         for (NdefRecord record : currentMessage.getRecords()) {
             if (isPrefixedBy(record.getPayload(), WHEELCHAIR_WEIGHT_PREFIX)) {
@@ -134,7 +133,7 @@ public class WeightLog extends AppCompatActivity implements NfcWriter /*implemen
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 NdefMessage message = (NdefMessage) intent
                         .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
-                NdefMessage messageToWrite = updateWheelchairWeight(weightToWrite, message);
+                NdefMessage messageToWrite = createUpdatedMessage(weightToWrite, message);
                 try {
                     Ndef ndef = Ndef.get(tag);
                     ndef.connect();
