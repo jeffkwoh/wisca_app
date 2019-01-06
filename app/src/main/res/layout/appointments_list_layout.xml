@@ -4,36 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:minWidth="400dp">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="334dp"
+        android:layout_height="80dp"
         app:cardCornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="4dp">
+        app:cardUseCompatPadding="true"
+        tools:layout_editor_absoluteY="50dp">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/relativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="326dp"
+            android:layout_height="match_parent"
+            android:minWidth="20dp">
 
 
             <TextView
                 android:id="@+id/textViewDate"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="21 OCT 2018"
@@ -47,19 +42,20 @@
                 android:id="@+id/textViewWeightTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="WEIGHT"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textViewDate"
-                app:layout_constraintTop_toBottomOf="@+id/textViewReasonTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewReason" />
 
             <TextView
                 android:id="@+id/textViewReasonTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="REASON"
                 app:layout_constraintStart_toEndOf="@+id/textViewDate"
@@ -67,12 +63,13 @@
 
             <TextView
                 android:id="@+id/textViewReason"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:text="Fever medication dosage"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textViewReasonTitle"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"
                 app:layout_constraintStart_toEndOf="@+id/textViewReasonTitle" />
 
@@ -80,8 +77,8 @@
                 android:id="@+id/textViewWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="27.9kg"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textViewWeightTitle"
                 app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"

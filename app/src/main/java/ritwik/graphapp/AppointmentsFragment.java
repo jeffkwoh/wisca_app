@@ -53,8 +53,14 @@ public class AppointmentsFragment extends Fragment {
         final List<Appointment> appointmentList = new ArrayList<>(); // TODO: List should be sorted
 
         //Add dummy data to appointment list
-        appointmentList.add(new Appointment(0, "11 Oct 2018", "99kg", "Finger stuck in fidget spinner"));
-        appointmentList.add(new Appointment(0, "11 Sep 2018", "20kg", "Both arms broken"));
+        appointmentList.add(new Appointment(0, "11 Apr 2018", "99kg", "Weight increased beyond acceptable level"));
+        appointmentList.add(new Appointment(1, "11 May 2018", "20kg", "Sudden weight drop"));
+        appointmentList.add(new Appointment(2, "13 May 2018", "19kg", "Having fever and nausea"));
+        appointmentList.add(new Appointment(3, "22 Jun 2018", "21.5kg", "Review drug prescription amount"));
+        appointmentList.add(new Appointment(4, "01  Jul 2018", "23.4kg", "Scheduled check-up"));
+        appointmentList.add(new Appointment(5, "01 Aug 2018", "26.8kg", "Scheduled check-up"));
+        appointmentList.add(new Appointment(6, "06 Sept 2018", "33.4kg", "Sudden weight increase"));
+        appointmentList.add(new Appointment(7, "19 Oct 2018", "23.4kg", "Scheduled check-up"));
 
 
         // TODO: bundle is always NULL. Need to figure out why and fix.
