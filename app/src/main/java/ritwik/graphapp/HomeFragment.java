@@ -25,19 +25,29 @@ public class HomeFragment extends Fragment {
 
         Bundle bundleActivity = getArguments();
         if (bundleActivity != null) {
-            List<String> wheelchairWeightData = bundleActivity
-                    .getStringArrayList(BUNDLE_WHEELCHAIR_WEIGHT_KEY);
-            List<String> patientWeightData = bundleActivity
-                    .getStringArrayList(BUNDLE_PATIENT_WEIGHT_KEY);
-
-            StringBuilder newString = new StringBuilder();
-            appendToStringBuilder(wheelchairWeightData, newString, "Wheelchairweight:\n");
-            appendToStringBuilder(patientWeightData, newString, "PatientWeightData:\n");
-
-            textViewNfcReadData.setText(newString.toString());
+            renderNfcData(textViewNfcReadData, bundleActivity);
         }
 
+        Button buttonTestWrite = (Button) view.findViewById(R.id.buttonTestWrite);
+        buttonTestWrite.setOnClickListener((v) -> {
+            NfcWriter writer = (NfcWriter) getActivity();
+            writer.writeWheelchairWeightToTag(123);
+        });
+
         return view;
+    }
+
+    private void renderNfcData(TextView textViewNfcReadData, Bundle bundleActivity) {
+        List<String> wheelchairWeightData = bundleActivity
+                .getStringArrayList(BUNDLE_WHEELCHAIR_WEIGHT_KEY);
+        List<String> patientWeightData = bundleActivity
+                .getStringArrayList(BUNDLE_PATIENT_WEIGHT_KEY);
+
+        StringBuilder newString = new StringBuilder();
+        appendToStringBuilder(wheelchairWeightData, newString, "Wheelchairweight:\n");
+        appendToStringBuilder(patientWeightData, newString, "PatientWeightData:\n");
+
+        textViewNfcReadData.setText(newString.toString());
     }
 
     private void appendToStringBuilder(List<String> wheelchairWeightData,

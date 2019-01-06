@@ -3,9 +3,11 @@ package ritwik.graphapp;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +19,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +29,12 @@ import static ritwik.graphapp.NfcUtils.NfcConstants.BUNDLE_WHEELCHAIR_WEIGHT_KEY
 import static ritwik.graphapp.NfcUtils.NfcConstants.PATIENT_WEIGHT_PREFIX;
 import static ritwik.graphapp.NfcUtils.NfcConstants.WHEELCHAIR_WEIGHT_PREFIX;
 
-public class WeightLog extends AppCompatActivity /*implements OnChartGestureListener, OnChartValueSelectedListener*/ {
+public class WeightLog extends AppCompatActivity implements NfcWriter /*implements OnChartGestureListener, OnChartValueSelectedListener*/ {
     NfcAdapter mNfcAdapter = null;
     IntentFilter[] intentFiltersArray = null;
     String[][] techListsArray = null;
     PendingIntent pendingIntent = null;
+    Integer weightToWrite = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +74,30 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
         return mNfcAdapter;
     }
 
-//    public void updateWheelchairWeight(int weight) {
-//        NfcAdapter mNfcAdapter = getNfcAdapter();
-//        mNfcAdapter.
-//    }
+    public void writeWheelchairWeightToTag(int weight) {
+        weightToWrite = weight;
+    }
+
+    public NdefMessage updateWheelchairWeight(int weight, NdefMessage currentMessage) {
+        // checks for null messages
+        if (currentMessage == null) {
+            return null;
+        }
+        // TODO: Add guards to verify message is a Wisca message.
+
+        List<NdefRecord> recordList = new ArrayList<>();
+        recordList.add(NdefRecord.createTextRecord(
+                        "en",
+                        " :" + String.valueOf(weight)));
+        // Retains only non wheelchair-weight tag data
+        for (NdefRecord record : currentMessage.getRecords()) {
+            if (isPrefixedBy(record.getPayload(), WHEELCHAIR_WEIGHT_PREFIX)) {
+                continue;
+            }
+            recordList.add(record);
+        }
+        return new NdefMessage(recordList.toArray(new NdefRecord[0]));
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -104,7 +129,26 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
         Intent intent = getIntent();
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-            // Build Fragment
+            // Write to NFC
+            if (weightToWrite != null) {
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                NdefMessage message = (NdefMessage) intent
+                        .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
+                NdefMessage messageToWrite = updateWheelchairWeight(weightToWrite, message);
+                try {
+                    Ndef ndef = Ndef.get(tag);
+                    ndef.connect();
+                    ndef.writeNdefMessage(messageToWrite);
+                    ndef.close();
+                    // clear the write buffer so it won't rewrite.
+                    weightToWrite = null;
+                } catch (FormatException | IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            // Build Fragment for NFC READ
             Fragment homeFragment = new HomeFragment();
             Bundle mBundle = getNfcBundle(intent);
             homeFragment.setArguments(mBundle);
@@ -112,6 +156,8 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, homeFragment).commit();
+
+
         }
     }
 
@@ -143,7 +189,6 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
                     tokens.add(humanReadablePayload);
                 }
             }
-
         }
 
         ArrayList<String> patientWeightDateData = filterByPrefix(tokens, PATIENT_WEIGHT_PREFIX);
@@ -153,6 +198,15 @@ public class WeightLog extends AppCompatActivity /*implements OnChartGestureList
         nfcBundle.putStringArrayList(BUNDLE_WHEELCHAIR_WEIGHT_KEY, wheelchairWeightData);
 
         return nfcBundle;
+    }
+
+    private boolean isPrefixedBy(byte[] payload, char prefix) {
+        String token = new String(payload);
+
+        List<String> wrapper = new ArrayList<>();
+        wrapper.add(token);
+        // If result is an empty list, then the prefix is not present in token
+        return !filterByPrefix(wrapper, prefix).isEmpty();
     }
 
     private ArrayList<String> filterByPrefix(List<String> tokens, char prefix) {
