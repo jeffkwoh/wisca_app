@@ -145,18 +145,16 @@ public class WeightLog extends AppCompatActivity implements NfcWriter /*implemen
                     e.printStackTrace();
                 }
 
+            } else {
+                // Build Fragment for NFC READ to Graph
+                Bundle mBundle = getNfcBundle(intent);
+                Fragment weightTrackerFragment = new WeightTrackerFragment();
+                weightTrackerFragment.setArguments(mBundle);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, weightTrackerFragment).commit();
             }
-
-            // Build Fragment for NFC READ
-            Fragment homeFragment = new HomeFragment();
-            Bundle mBundle = getNfcBundle(intent);
-            homeFragment.setArguments(mBundle);
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, homeFragment).commit();
-
-
         }
     }
 
