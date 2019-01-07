@@ -36,17 +36,12 @@ public class WeightTrackerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tracker, container, false);
 
-        //setContentView(R.layout.fragment_tracker);
-
         mTextMessage = (TextView) view.findViewById(R.id.message);
 
         mChart = (LineChart) view.findViewById(R.id.linechart);
 
-//        mChart.setOnChartGestureListener(WeightLog.this);
-//        mChart.setOnChartValueSelectedListener(WeightLog.this);
-
         mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(false);
+        mChart.setScaleEnabled(true);
 
         ArrayList<Entry> coordinates = new ArrayList<>();
 
@@ -57,10 +52,10 @@ public class WeightTrackerFragment extends Fragment {
         if (patientWeightDateList != null) {
             coordinates.addAll(parseToEntries(patientWeightDateList));
         }
-        Collections.sort(coordinates, (a, b)-> Math.round(a.getX() - b.getX()));
-        LineDataSet set1 = new LineDataSet(coordinates, "Data Set 1");
+        Collections.sort(coordinates, (a, b) -> Math.round(a.getX() - b.getX()));
+        LineDataSet set1 = new LineDataSet(coordinates, "Weight");
 
-        set1.setFillAlpha(110);
+        styleLineDataSet(set1);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -71,7 +66,21 @@ public class WeightTrackerFragment extends Fragment {
 
         mTextMessage = (TextView) view.findViewById(R.id.message);
 
+        setNewestWeight(view, coordinates);
+
         return view;
+    }
+
+    private void setNewestWeight(View view, ArrayList<Entry> coordinates) {
+        float newestWeight =  coordinates.get(coordinates.size() - 1).getY();
+        String newestWeighString = String.format("%.2f", newestWeight) + "kg";
+        TextView textViewNewestWeight = (TextView) view.findViewById(R.id.textViewNewestWeight);
+        textViewNewestWeight.setText(newestWeighString);
+    }
+
+    private void styleLineDataSet(LineDataSet set1) {
+        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
     }
 
     private List<Entry> parseToEntries(List<String> patientWeightDateList) {

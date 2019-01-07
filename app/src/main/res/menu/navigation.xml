@@ -16,9 +16,4 @@
         android:icon="@drawable/ic_local_hospital_black_24dp"
         android:title="Doctor's Visit" />
 
-    <item
-        android:id="@+id/navigation_calendar"
-        android:icon="@drawable/ic_calendar_black_24dp"
-        android:title="Calendar" />
-
 </menu>
