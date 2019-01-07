@@ -235,9 +235,6 @@ public class WeightLog extends AppCompatActivity implements NfcWriter /*implemen
                         case R.id.navigation_Visit:
                             selectedFragment = new AppointmentsFragment();
                             break;
-                        case R.id.navigation_calendar:
-                            selectedFragment = new CalendarFragment();
-                            break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();
